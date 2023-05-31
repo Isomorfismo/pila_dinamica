@@ -1,7 +1,3 @@
-//Haz un programa que lea una pila dinamica de enteros
-//La pila tiene funciones para crear la pila, insertar, extraer, mostrar, vaciar y saber si esta vacia
-//El programa tiene un menu con las opciones de insertar, extraer, mostrar, vaciar y salir
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,13 +8,13 @@ typedef struct Nodo{
 }nodo;
 
 typedef struct Pila{
-    nodo *tope;
+    nodo *top;
 }pila;
 
 void crear(pila *p);
 int estaVacia(pila *p);
-void insertar(pila *p, int dato);
-int extraer(pila *p);
+void push(pila *p, int dato);
+int pop(pila *p);
 void mostrar(pila *p);
 void vaciar(pila *p);
 
@@ -38,13 +34,11 @@ int main(){
             case 1:
                 printf("Dato: ");
                 scanf("%d", &dato);
-                insertar(&p, dato);
+                push(&p, dato);
                 break;
             case 2:
-                dato=extraer(&p);
-                if(dato!=-1){
-                    printf("Dato extraido: %d\n", dato);
-                }
+                dato=pop(&p);
+                printf("Dato extraido: %d\n", dato);
                 break;
             case 3:
                 mostrar(&p);
@@ -64,31 +58,30 @@ int main(){
 }
 
 void crear(pila *p){
-    p->tope=NULL;
+    p->top=NULL;
 }
 
 int estaVacia(pila *p){
-    return p->tope == NULL ? 1 : 0;
+    return p->top == NULL ? 1 : 0;
 } 
 
-void insertar(pila *p, int dato){
+void push(pila *p, int dato){
     nodo *nuevo=(nodo*)malloc(sizeof(nodo));
     nuevo->dato=dato;
-    nuevo->sig=p->tope;
-    p->tope=nuevo;
+    nuevo->sig=p->top;
+    p->top=nuevo;
 }
 
-int extraer(pila *p){
+int pop(pila *p){
     if(estaVacia(p)){
         printf("Pila vacia\n");
         return -1;
     }
-    int dato=p->tope->dato;
-    nodo *aux=p->tope;
-    p->tope=p->tope->sig;
+    int dato=p->top->dato;
+    nodo *aux=p->top;
+    p->top=p->top->sig;
     free(aux);
     return dato;
-    
 }
 
 void mostrar(pila *p){
@@ -96,7 +89,7 @@ void mostrar(pila *p){
         printf("Pila vacia\n");
         return;
     }
-    nodo *aux=p->tope;
+    nodo *aux=p->top;
     while(aux!=NULL){
         printf("%d\n", aux->dato);
         aux=aux->sig;
@@ -104,10 +97,10 @@ void mostrar(pila *p){
 }
 
 void vaciar(pila *p){
-    nodo *aux=p->tope;
+    nodo *aux=p->top;
     while(aux!=NULL){
-        p->tope=p->tope->sig;
+        p->top=p->top->sig;
         free(aux);
-        aux=p->tope;
+        aux=p->top;
     }
 }
